@@ -13,14 +13,19 @@
 ✔ - Update the connection string in the appsettings.Development.json file of both Fundo projects.Applications.WebApi and Fundo.Applications.WebApiSecurity.
 
 ✔ - Open the windows package Manager Console for execute migrations and check if the database was successfully created
+    
     command: Update-Database 
 
 ✔ - For APIs tests, open the Postman and import both files of the folder take-home-test\Postman
+
     Fundo.postman_collection.json
+    
     LOCAL HOST.postman_environment.json
 
-✔ - The user for authentication was created by Entity Framework Seed and can be used in the login route previously imported in postman 
+✔ - The user for authentication was created by Entity Framework Seed and can be used in the login route previously imported in postman
+
     user: john@test.com
+
     password: 1234
  
 ## **Additional Information**
