@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<IsPackable>false</IsPackable>
 	</PropertyGroup>
 
@@ -23,6 +23,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Fundo.Applications.Domain\Fundo.Applications.Domain.csproj" />
+		<ProjectReference Include="..\Fundo.Applications.Repository\Fundo.Applications.Repository.csproj" />
+		<ProjectReference Include="..\Fundo.Applications.WebApiSecurity\Fundo.Applications.WebApiSecurity.csproj" />
 		<ProjectReference Include="..\Fundo.Applications.WebApi\Fundo.Applications.WebApi.csproj" />
 	</ItemGroup>
 

@@ -1,21 +1,15 @@
 ﻿using Fundo.Applications.Domain.Interfaces;
 using Fundo.Applications.Domain.Services;
-using Fundo.Applications.Repository;
-using Fundo.Applications.Repository.Services;
 using Fundo.Applications.Repository.Interface;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+using Fundo.Applications.Repository.Services;
+using Fundo.Applications.Repository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
-using System;
 
-namespace Fundo.Applications.WebApi;
+namespace Fundo.Applications.WebApiSecurity;
 
 public class Startup
 {
@@ -30,10 +24,11 @@ public class Startup
         services.AddControllers();
         services.AddSwaggerGen();
         services.AddDbContext<ContextDB>(options =>
-        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-            b => b.MigrationsAssembly("Fundo.Applications.WebApi")));
+         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+             b => b.MigrationsAssembly("Fundo.Applications.WebApi")));
 
         services.AddScoped<IJwtTokenService, JwtTokenService>();
+        services.AddScoped<IApplicantRepository, ApplicantRepository>();
 
         string key = Configuration.GetSection("jwt:secretKey").Value!;
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -52,20 +47,10 @@ public class Startup
         });
 
         services.AddAuthorization();
-         
+
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Loans API v1", Version = "v1" });
-
-            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-            {
-                Name = "Authorization",
-                Type = SecuritySchemeType.Http,
-                Scheme = "bearer",
-                BearerFormat = "JWT",
-                In = ParameterLocation.Header,
-                Description = "Insert the JWT token in the following format: Bearer {token}"
-            });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Security API", Version = "v1" });
 
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
@@ -82,11 +67,6 @@ public class Startup
                 }
             });
         });
-
-        services.AddScoped<ILoanManagementService, LoanManagementService>();
-
-        services.AddScoped<ILoanRepository, LoanRepository>();
-        services.AddScoped<IApplicantRepository, ApplicantRepository>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -98,16 +78,13 @@ public class Startup
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Loans API v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Security API v1");
             });
         }
 
         app.UseRouting();
-
         app.UseAuthentication();
-
         app.UseAuthorization();
-
         app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
 }

@@ -1,0 +1,217 @@
+{
+	"info": {
+		"_postman_id": "80c8fa01-51cc-4567-a7ec-39a05f280a9f",
+		"name": "Fundo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1101013"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"if (pm.response.code === 200) {\r",
+							"    pm.environment.set(\"TOKEN\", jsonData.token);\r",
+							"} else {\r",
+							"    pm.environment.set(\"TOKEN\", \"! invalid token\");\r",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"user\": \"john@test.com\",\r\n  \"password\": \"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7125/api/loan/login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7125",
+					"path": [
+						"api",
+						"loan",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List All Loans",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/loan/loans",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"loan",
+						"loans"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Loan Detail",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/loan/4d6f5ee5-0d01-48b9-af86-dd09eebb320d?Authorization=Bearer {{TOKEN}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"loan",
+						"4d6f5ee5-0d01-48b9-af86-dd09eebb320d"
+					],
+					"query": [
+						{
+							"key": "Authorization",
+							"value": "Bearer {{TOKEN}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Loan",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n  \"applicantId\": \"0c2bd682-3e9a-4743-bab9-c4b249f375f6\",\r\n  \"amount\": 17751,\r\n  \"currentBalance\": 2220,\r\n  \"applicantName\": \"jose\",\r\n  \"status\": 1 \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/loan",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"loan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Payment Loan",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{TOKEN}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{    \r\n  \"amount\": 2000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:5001/api/loan/4d6f5ee5-0d01-48b9-af86-dd09eebb320d/payment",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"api",
+						"loan",
+						"4d6f5ee5-0d01-48b9-af86-dd09eebb320d",
+						"payment"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
