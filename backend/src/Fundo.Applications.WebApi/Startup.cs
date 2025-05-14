@@ -100,6 +100,16 @@ public class Startup
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Loans API v1");
             });
+
+            app.Use(async (context, next) =>
+            {
+                if (context.Request.Path == "/")
+                {
+                    context.Response.Redirect("/swagger");
+                    return;
+                }
+                await next();
+            });
         }
 
         app.UseRouting();

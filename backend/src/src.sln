@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fundo.Applications.WebApiSe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E0EA4365-B4D4-4227-86C6-54F87235F37F}"
 	ProjectSection(SolutionItems) = preProject
-		README.md = README.md
+		..\..\README - 2.md = ..\..\README - 2.md
 	EndProjectSection
 EndProject
 Global
