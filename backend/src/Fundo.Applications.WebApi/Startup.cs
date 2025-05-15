@@ -84,7 +84,6 @@ public class Startup
         });
 
         services.AddScoped<ILoanManagementService, LoanManagementService>();
-
         services.AddScoped<ILoanRepository, LoanRepository>();
         services.AddScoped<IApplicantRepository, ApplicantRepository>();
     }

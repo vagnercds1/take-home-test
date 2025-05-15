@@ -33,7 +33,7 @@ namespace Fundo.Applications.Domain.Services
 
             var foundUser = await _applicantRepository.LoginApplicantAsync(requestLogin.User, requestLogin.Password);
 
-            return (foundUser == null) ? "" : GenerateJwtToken(username: foundUser.User);
+            return (foundUser == null) ? "" : GenerateJwtToken(username: foundUser!.User);
         }
 
         private string GenerateJwtToken(string username)

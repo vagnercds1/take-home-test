@@ -103,7 +103,13 @@
 					"type": "noauth"
 				},
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{TOKEN}}",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "",
@@ -114,7 +120,7 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:5001/api/loan/4d6f5ee5-0d01-48b9-af86-dd09eebb320d?Authorization=Bearer {{TOKEN}}",
+					"raw": "https://localhost:5001/api/loan/1fa3e50a-d169-4b32-a869-33616b7d971d?Authorization=Bearer {{TOKEN}}",
 					"protocol": "https",
 					"host": [
 						"localhost"
@@ -123,7 +129,7 @@
 					"path": [
 						"api",
 						"loan",
-						"4d6f5ee5-0d01-48b9-af86-dd09eebb320d"
+						"1fa3e50a-d169-4b32-a869-33616b7d971d"
 					],
 					"query": [
 						{

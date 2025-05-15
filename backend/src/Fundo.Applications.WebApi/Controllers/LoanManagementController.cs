@@ -27,8 +27,8 @@ namespace Fundo.Applications.WebApi.Controllers
 
         [HttpPost()]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Authorize]
         public async Task<ActionResult<string>> PostLoanAsync([FromBody] RequestLoan requestLoan)
@@ -52,13 +52,16 @@ namespace Fundo.Applications.WebApi.Controllers
         [HttpPost("{loanId}/payment")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Authorize]
-        public async Task<ActionResult<string>> PaymentLoanAsync(string loanId, [FromBody] RequestDeduce deduceLoan)
+        public async Task<ActionResult<string>> PaymentLoanAsync([FromRoute] string loanId, [FromBody] RequestDeduce deduceLoan)
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(loanId))                
+                    return BadRequest("The loanId parameter is required.");
+                 
                 ValidationResult result = await _loanManagementService.DeductLoanAsync(loanId, deduceLoan);
 
                 if (!result.IsValid)
@@ -75,14 +78,17 @@ namespace Fundo.Applications.WebApi.Controllers
 
         [HttpGet("{loanId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Authorize]
-        public async Task<ActionResult<ApplicantLoan>> GetLoanByIdAsync(string loanId)
+        public async Task<ActionResult<ApplicantLoan>> GetLoanByIdAsync([FromRoute] string loanId)
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(loanId))
+                    return BadRequest("The loanId parameter is required.");
+
                 var loan = await _loanManagementService.GetLoanDetailsAsync(loanId);
 
                 return loan != null ?
@@ -98,7 +104,7 @@ namespace Fundo.Applications.WebApi.Controllers
 
         [HttpGet("loans")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Authorize]

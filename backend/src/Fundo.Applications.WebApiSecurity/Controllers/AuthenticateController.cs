@@ -39,7 +39,7 @@ public class AuthenticateController : Controller
 
             return String.IsNullOrEmpty(token) ?
                 StatusCode(StatusCodes.Status401Unauthorized, "User or Password incorrect.") :
-                Ok(new { email = requestLogin.User, token = token });
+                Ok(new ResponseLogin { Email = requestLogin.User, Token = token });
         }
         catch (Exception ex)
         {

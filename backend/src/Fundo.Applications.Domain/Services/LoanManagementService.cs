@@ -38,7 +38,8 @@ public class LoanManagementService : ILoanManagementService
     public async Task<ValidationResult> DeductLoanAsync(string loanId, RequestDeduce requestDeduce)
     {
         var foundLoan = await _loanRepository.GetLoanDetailsAsync(loanId);
-        
+        foundLoan ??= new ApplicantLoan();
+
         var validation = new LoanDeductValidation(foundLoan);
         var validationResult = await validation.ValidateAsync(requestDeduce);
 

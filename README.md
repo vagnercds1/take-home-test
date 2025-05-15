@@ -30,13 +30,10 @@
  
 ## **Additional Information**
 
-With the goal of contributing to Fundo’s development team, I developed the loan management API following best development practices and a DDD architecture. I implemented the repository layer, request model validation using FluentValidation, standardized HTTP responses using appropriate HttpStatus Codes and HTTP Verbs, and a well-documented Swagger interface. I also implemented standardized logging to be captured by tools like FileBeat and stored in databases such as Elasticsearch.
+With the goal of contributing to Fundo’s development team, I developed the loan management API following best development practices and a DDD architecture. I implemented the repository layer, request model validation using FluentValidation, standardized HTTP responses using appropriate HttpStatus Codes and HTTP Verbs, and a well-documented Swagger interface. I also implemented standardized logging to be captured by tools like FileBeat and stored in databases such as Elastic.
 
 For security, I developed a new JWT-based authentication service, designed to run in a separate container, enabling individual scalability and enhanced protection against login-related attacks.
 
 Unfortunately, due to time constraints, I wasn't able to integrate the frontend or create a full Docker Compose setup with the three applications: Frontend, LoanWebApi, and LoginApi.
-Due to time constraints, unit tests were created only in the domain layer. However, I believe this is enough to demonstrate that I have the technical knowledge to implement tests across all layers with full line and rule coverage.
-
-Given more time, I would study Angular to implement the frontend integration, although I’m fully capable of working with it and have used it over five years ago.
 
 During development, I saw the need to review some Entity Framework Core concepts and studied them in order to implement the data layer successfully.
