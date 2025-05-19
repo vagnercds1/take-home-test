@@ -1,5 +1,11 @@
 using Fundo.Applications.Domain.Models;
+using Fundo.Applications.Repository;
+using Fundo.Applications.Repository.Entity;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -8,33 +14,87 @@ using System.Threading.Tasks;
 using Xunit;
 
 namespace Fundo.Services.Tests.Integration
-{
-    /*************************************
-      
-     1 - In the real case, the repository layer should be mocked and all endpoints should be tested.
-
-     *************************************/
-
-    public class LoanManagementControllerTests : 
+{ 
+    public class LoanManagementControllerTests :
         IClassFixture<WebApplicationFactory<Fundo.Applications.WebApi.Startup>>,
         IClassFixture<WebApplicationFactory<Fundo.Applications.WebApiSecurity.Startup>>
     {
         private readonly HttpClient _authClient;
         private readonly HttpClient _clientLoan;
- 
-        public LoanManagementControllerTests(WebApplicationFactory<Fundo.Applications.WebApi.Startup> factoryLoan,
-                                             WebApplicationFactory<Fundo.Applications.WebApiSecurity.Startup> factoryAuth)
+        private readonly IServiceProvider _serviceProvider;
+
+        public LoanManagementControllerTests(
+         WebApplicationFactory<Fundo.Applications.WebApi.Startup> factoryLoan,
+         WebApplicationFactory<Fundo.Applications.WebApiSecurity.Startup> factoryAuth)
         { 
-            _clientLoan = factoryLoan.CreateClient(new WebApplicationFactoryClientOptions
+            var authFactory = factoryAuth.WithWebHostBuilder(builder =>
             {
-                AllowAutoRedirect = false
+                builder.ConfigureServices(services =>
+                { 
+                    var descriptor = services.SingleOrDefault(
+                        d => d.ServiceType == typeof(DbContextOptions<ContextDB>));
+                    if (descriptor != null)
+                    {
+                        services.Remove(descriptor);
+                    }
+                     
+                    services.AddDbContext<ContextDB>(options =>
+                        options.UseInMemoryDatabase("TestDatabase"));
+                });
             });
 
-            _authClient = factoryAuth.CreateClient(new WebApplicationFactoryClientOptions
+            _authClient = authFactory.CreateClient();
+             
+            var loanFactory = factoryLoan.WithWebHostBuilder(builder =>
             {
-                AllowAutoRedirect = false
+                builder.ConfigureServices(services =>
+                { 
+                    var descriptor = services.SingleOrDefault(
+                        d => d.ServiceType == typeof(DbContextOptions<ContextDB>));
+                    if (descriptor != null)
+                    {
+                        services.Remove(descriptor);
+                    }
+                     
+                    services.AddDbContext<ContextDB>(options =>
+                        options.UseInMemoryDatabase("TestDatabase"));
+                });
             });
+
+            _clientLoan = loanFactory.CreateClient();
+            _serviceProvider = loanFactory.Services;
+
+            #region Inicialize in memory database
+
+            using (var scope = _serviceProvider.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ContextDB>();
+                context.Applicants.Add(new Applicant
+                {
+                    ApplicantId = "12345",
+                    ApplicantName = "John Doe",
+                    Document = "123456789",
+                    User = "john@test.com",
+                    Password = "1234"
+                });
+                context.SaveChangesAsync();
+
+                context.Loans.Add(new Loan
+                {
+                    ApplicantId = "12345",
+                    Amount = 1000,
+                    CurrentBalance = 1000,
+                    DateInsert = DateTime.UtcNow,
+                    DateUpdate = DateTime.UtcNow,
+                    LoanId = "12345",
+
+                });
+                context.SaveChangesAsync();
+            }
+
+            #endregion
         }
+
 
         private async Task<string> AuthenticateAsync()
         {
@@ -79,7 +139,7 @@ namespace Fundo.Services.Tests.Integration
             {
                 Amount = 1000.0,
                 Term = 12,
-                ApplicantId = "d25eda0b-c474-465c-b32b-2e3575aa9811"
+                ApplicantId = "12345"
             };
 
             var content = new StringContent(
@@ -95,7 +155,7 @@ namespace Fundo.Services.Tests.Integration
             Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
             var responseContent = await response.Content.ReadAsStringAsync();
             Assert.Contains("Created successfully", responseContent);
-        }
+        }         
 
         [Fact]
         public async Task PostLoanAsync_ShouldReturn400_WhenRequestIsNotValid()
@@ -107,8 +167,7 @@ namespace Fundo.Services.Tests.Integration
             var requestLoan = new
             {
                 Amount = 1000.0,
-                Term = 12,
-                ApplicantId = "12345"
+                Term = 12 
             };
 
             var content = new StringContent(
@@ -152,7 +211,7 @@ namespace Fundo.Services.Tests.Integration
         {
             // Arrange:
             var token = await AuthenticateAsync();
-        
+
             _clientLoan.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act: 

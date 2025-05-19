@@ -1,19 +1,20 @@
 ﻿using Fundo.Applications.Domain.Interfaces;
 using Fundo.Applications.Domain.Services;
 using Fundo.Applications.Repository;
-using Fundo.Applications.Repository.Services;
 using Fundo.Applications.Repository.Interface;
+using Fundo.Applications.Repository.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Text;
 
 namespace Fundo.Applications.WebApi;
 
@@ -27,12 +28,20 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        //Container based connection
+        //var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+        //var dbName = Environment.GetEnvironmentVariable("DB_NAME");
+        //var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+        //var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword}";
+
+        var connectionString = Configuration.GetConnectionString("DefaultConnection");
+     
+        services.AddDbContext<ContextDB>(options =>
+            options.UseSqlServer(connectionString,
+                                 b => b.MigrationsAssembly("Fundo.Applications.WebApi")));
+         
         services.AddControllers();
         services.AddSwaggerGen();
-        services.AddDbContext<ContextDB>(options =>
-        options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-            b => b.MigrationsAssembly("Fundo.Applications.WebApi")));
-
         services.AddScoped<IJwtTokenService, JwtTokenService>();
 
         string key = Configuration.GetSection("jwt:secretKey").Value!;
@@ -52,7 +61,7 @@ public class Startup
         });
 
         services.AddAuthorization();
-         
+
         services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "Loans API v1", Version = "v1" });

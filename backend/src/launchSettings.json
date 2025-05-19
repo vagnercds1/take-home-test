@@ -4,10 +4,11 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "composeLaunchAction": "LaunchBrowser",
-      "composeLaunchServiceName": "fundo.applications.webapi",
+      "composeLaunchServiceName": "fundoapplicationswebapi",
       "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}",
       "serviceActions": {
-        "fundo.applications.webapi": "StartDebugging"
+        "fundoapplicationswebapi": "StartDebugging",
+        "fundoapplicationswebapisecurity": "StartDebugging"
       }
     }
   }

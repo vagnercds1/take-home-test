@@ -5,12 +5,8 @@ using Fundo.Applications.Domain.Services;
 using Fundo.Applications.Domain.Validations;
 using Fundo.Applications.Repository.Entity;
 using Fundo.Applications.Repository.Interface;
-using Microsoft.AspNetCore.Identity.Data;
 using Moq;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 

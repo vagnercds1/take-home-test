@@ -35,11 +35,6 @@ public class LoanDeductValidation : AbstractValidator<RequestDeduce>
     {
         RuleFor(x => x).Cascade(CascadeMode.Continue)
           .Must(x => x.Amount > 0).WithMessage("Amount need to be greater than 0")
-          .Must(x => foundLoan != null).WithMessage("Loan not found");
-
-        RuleFor(x => x.Amount)
-        .Must(amount => foundLoan!.CurrentBalance - amount >= 0)
-        .WithMessage("Excess paid amount")
-        .When(x => foundLoan != null);
+          .Must(x => !string.IsNullOrEmpty( foundLoan.LoanId)).WithMessage("Loan not found");  
     }
 }

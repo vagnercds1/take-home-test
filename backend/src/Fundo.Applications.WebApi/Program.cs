@@ -25,7 +25,7 @@ public static class Program
     public static IWebHostBuilder CreateWebHostBuilder(string[] args)
     {
         return WebHost.CreateDefaultBuilder(args)
-            .UseStartup<Startup>()
-            .UseUrls("http://0.0.0.0:8080");
+            .UseStartup<Startup>();
+        //.UseUrls("http://0.0.0.0:8080");
     }
 }

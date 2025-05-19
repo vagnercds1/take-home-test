@@ -18,10 +18,10 @@ namespace Fundo.Applications.Repository
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             ConfigureEntities(modelBuilder);
+            
+            base.OnModelCreating(modelBuilder);
 
             ExecuteSeedData(modelBuilder);
-
-            base.OnModelCreating(modelBuilder); 
         }
 
         private void ConfigureEntities(ModelBuilder modelBuilder)
