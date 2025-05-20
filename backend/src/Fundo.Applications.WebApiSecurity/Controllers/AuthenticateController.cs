@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fundo.Applications.WebApiSecurity.Controllers;
 
-[Route("api/loan")]
+[Route("api/security")]
 [ApiController]
 public class AuthenticateController : Controller
 {

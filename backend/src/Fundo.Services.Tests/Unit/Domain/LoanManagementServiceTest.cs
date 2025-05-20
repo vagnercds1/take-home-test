@@ -110,7 +110,7 @@ public class LoanManagementServiceTest
         // Arrange
         var loanId = "loan123";
         var requestDeduce = new RequestDeduce { Amount = 100 };
-        var foundLoan = new ApplicantLoan { CurrentBalance = 200 };
+        var foundLoan = new ApplicantLoan { CurrentBalance = 200,LoanId = loanId };
         var validationResult = new ValidationResult();
 
         _loanRepositoryMock.Setup(repo => repo.GetLoanDetailsAsync(loanId)).ReturnsAsync(foundLoan);

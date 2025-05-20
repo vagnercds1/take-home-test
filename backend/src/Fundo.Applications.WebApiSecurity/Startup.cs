@@ -21,15 +21,17 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        //Container based connection
+        //Run Container based connection
         //var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
         //var dbName = Environment.GetEnvironmentVariable("DB_NAME");
         //var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
         //var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword}";
 
+        //Run Local based connection
         var connectionString = Configuration.GetConnectionString("DefaultConnection");
+
         services.AddDbContext<ContextDB>(options =>
-            options.UseSqlServer(connectionString!, 
+            options.UseSqlServer(connectionString!,
                                  b => b.MigrationsAssembly("Fundo.Applications.WebApi")));
 
         services.AddControllers();
@@ -90,9 +92,17 @@ public class Startup
             });
         }
 
+        app.UseCors(builder =>
+            builder
+              .AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseEndpoints(endpoints => endpoints.MapControllers());
+
+        
     }
 }

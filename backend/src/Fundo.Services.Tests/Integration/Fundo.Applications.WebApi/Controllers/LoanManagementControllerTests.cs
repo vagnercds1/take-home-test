@@ -95,7 +95,6 @@ namespace Fundo.Services.Tests.Integration
             #endregion
         }
 
-
         private async Task<string> AuthenticateAsync()
         {
             // Arrange: 
@@ -112,7 +111,7 @@ namespace Fundo.Services.Tests.Integration
             );
 
             // Act: 
-            var response = await _authClient.PostAsync("/api/loan/login", content);
+            var response = await _authClient.PostAsync("/api/security/login", content);
 
             // Assert: 
             response.EnsureSuccessStatusCode();

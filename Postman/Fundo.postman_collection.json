@@ -39,15 +39,15 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:7125/api/loan/login",
+					"raw": "https://localhost:5011/api/security/login",
 					"protocol": "https",
 					"host": [
 						"localhost"
 					],
-					"port": "7125",
+					"port": "5011",
 					"path": [
 						"api",
-						"loan",
+						"security",
 						"login"
 					]
 				}

@@ -20,13 +20,33 @@
 
     Fundo.postman_collection.json
     
-    LOCAL HOST.postman_environment.json
+    LocalHost.postman_environment.json
 
 ✔ - The user for authentication was created by Entity Framework Seed and can be used in the login route previously imported in postman
 
     user: john@test.com
 
     password: 1234
+
+
+✔ - To run the application in Docker, open the folder take-home-test\backend and run the command:
+    Alter the file Fundo.Applications.WebApi\Startup.cs and Fundo.Applications.WebApiSecurity\Startup.cs for retrive the connection string from the environment variable.
+
+	docker-compose up --build
+
+	Open the browser and access the URL: http://localhost:5000/
+
+	The Swagger interface will be available at: http://localhost:5000/swagger/index.html
+
+
+✔ - For start the Angular application, open the folder take-home-test\frontend and run the command:
+
+	npm install
+
+	npm start
+
+    Open the browser and access the URL: http://localhost:4200/
+
  
 ## **Additional Information**
 
@@ -34,6 +54,4 @@ With the goal of contributing to Fundo’s development team, I developed the loa
 
 For security, I developed a new JWT-based authentication service, designed to run in a separate container, enabling individual scalability and enhanced protection against login-related attacks.
 
-Unfortunately, due to time constraints, I wasn't able to integrate the frontend or create a full Docker Compose setup with the three applications: Frontend, LoanWebApi, and LoginApi.
-
-During development, I saw the need to review some Entity Framework Core concepts and studied them in order to implement the data layer successfully.
+During development, I saw the need to review some Entity Framework Core concepts, Angular JS basic concepts and Docker-Compose.

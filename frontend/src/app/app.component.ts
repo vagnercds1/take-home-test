@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
+import { LoanService } from './services/loan.service';
+import { Loan } from './models/loan.model'; 
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -10,31 +13,21 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
+ 
 export class AppComponent {
-  displayedColumns: string[] = [
-    'loanAmount',
-    'currentBalance',
-    'applicant',
-    'status',
-  ];
-  loans = [
-    {
-      loanAmount: 25000.00,
-      currentBalance: 18750.00,
-      applicant: 'John Doe',
-      status: 'active',
-    },
-    {
-      loanAmount: 15000.00,
-      currentBalance: 0,
-      applicant: 'Jane Smith',
-      status: 'paid',
-    },
-    {
-      loanAmount: 50000.00,
-      currentBalance: 32500.00,
-      applicant: 'Robert Johnson',
-      status: 'active',
-    },
-  ];
+  title = 'angular-loan-app';
+ 
+  allLoans$ = new Observable<Loan[]>();
+  displayedColumns: string[] = ['loanId', 'amount', 'currentBalance', 'status', 'dateInsert', 'dateUpdate', 'applicantId', 'applicantName'];
+ 
+  constructor(private loanService: LoanService) {  
+      this.GetAllLoans();
+    } 
+
+  GetAllLoans() {
+    const credentials = { user: 'john@test.com', password: '1234' };
+    this.loanService.getAuthorize(credentials).subscribe(() => {
+      this.allLoans$ = this.loanService.getLoans();     
+    });
+  }
 }
