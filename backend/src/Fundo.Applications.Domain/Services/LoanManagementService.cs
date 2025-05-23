@@ -13,14 +13,19 @@ public class LoanManagementService : ILoanManagementService
 {
     private readonly ILoanRepository _loanRepository;
     private readonly IApplicantRepository _applicantRepository;
-    public LoanManagementService(ILoanRepository loanRepository, IApplicantRepository applicantRepository)
+    private readonly IHistoryRepository _historyRepository;
+
+    public LoanManagementService(ILoanRepository loanRepository, 
+        IApplicantRepository applicantRepository, 
+        IHistoryRepository historyRepository)
     {
         _loanRepository = loanRepository;
         _applicantRepository = applicantRepository;
+        _historyRepository = historyRepository;
     }
 
     public async Task<ValidationResult> InsertLoanAsync(RequestLoan requestLoan)
-    { 
+    {
         LoanValidation validation = new(_applicantRepository);
 
         var validationResult = await validation.ValidateAsync(requestLoan);
@@ -51,13 +56,22 @@ public class LoanManagementService : ILoanManagementService
         updateLoan.CurrentBalance = updateLoan.CurrentBalance - requestDeduce.Amount;
         updateLoan.Status = updateLoan.CurrentBalance == 0 ? (int)StatusLoan.Paid : (int)StatusLoan.Active;
 
+        HistoryDeduce history = new HistoryDeduce()
+        { 
+            Amount = requestDeduce.Amount,
+            CurrentBalance = updateLoan.CurrentBalance,
+            Status = updateLoan.Status,
+            LoanId = foundLoan.LoanId
+        };
+        await _historyRepository.InsertHistoryLoanAsync(history);
+
         await _loanRepository.UpdateLoanAsync(updateLoan);
         return validationResult;
     }
 
     public async Task<ApplicantLoan?> GetLoanDetailsAsync(string loanId)
     {
-       return await _loanRepository.GetLoanDetailsAsync(loanId); 
+        return await _loanRepository.GetLoanDetailsAsync(loanId);
     }
 
     public async Task<List<ApplicantLoan>> GetLoansAsync()

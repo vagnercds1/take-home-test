@@ -6,7 +6,6 @@ using Fundo.Applications.Repository.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -96,6 +95,8 @@ public class Startup
         services.AddScoped<ILoanManagementService, LoanManagementService>();
         services.AddScoped<ILoanRepository, LoanRepository>();
         services.AddScoped<IApplicantRepository, ApplicantRepository>();
+        services.AddScoped<IHistoryRepository, HistoryRepository>();
+
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

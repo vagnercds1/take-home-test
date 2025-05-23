@@ -15,6 +15,8 @@ namespace Fundo.Applications.Repository
 
         public DbSet<Applicant>? Applicants { get; set; }
 
+        public DbSet<HistoryDeduce>? HistoryDeduces { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             ConfigureEntities(modelBuilder);
@@ -33,6 +35,17 @@ namespace Fundo.Applications.Repository
               .HasOne(l => l.Applicant)
               .WithMany(a => a.Loans)
               .HasForeignKey(l => l.ApplicantId);
+
+            modelBuilder.Entity<Loan>()
+               .Property(l => l.CurrentBalance)
+               .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Loan>()
+              .Property(l => l.Amount)
+              .HasColumnType("decimal(18,2)");
+
+
+            modelBuilder.Entity<HistoryDeduce>();
 
             modelBuilder.Entity<Loan>()
                .Property(l => l.CurrentBalance)

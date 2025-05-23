@@ -16,13 +16,15 @@ public class LoanManagementServiceTest
 {
     private readonly Mock<ILoanRepository> _loanRepositoryMock;
     private readonly Mock<IApplicantRepository> _applicantRepositoryMock;
+    private readonly Mock<IHistoryRepository> _historyRepository;
     private readonly LoanManagementService _loanManagementService;
 
     public LoanManagementServiceTest()
     {
         _loanRepositoryMock = new Mock<ILoanRepository>();
         _applicantRepositoryMock = new Mock<IApplicantRepository>();
-        _loanManagementService = new LoanManagementService(_loanRepositoryMock.Object, _applicantRepositoryMock.Object);
+        _historyRepository = new Mock<IHistoryRepository>();
+        _loanManagementService = new LoanManagementService(_loanRepositoryMock.Object, _applicantRepositoryMock.Object, _historyRepository.Object);
     }
 
     [Fact]
